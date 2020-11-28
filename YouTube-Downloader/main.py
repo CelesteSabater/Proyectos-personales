@@ -14,7 +14,6 @@ if opcion2 == 1:
 
     while True:
         url = input("Pon la url, para parar escribe STOP...\n")
-        #transformamos video en un objeto con la url que escojamos
         if url == "STOP":
             break
         video = pytube.YouTube(url)
