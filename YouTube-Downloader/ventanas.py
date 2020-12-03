@@ -6,17 +6,14 @@ from tkinter import filedialog, Text
 app = tk.Tk()
 
 def ubicacion():
-    directory = filedialog.askdirectory(title="Selecciona una carpeta donde descar...")
-    os.chdir(directory)
-    print(directory)
-
-    video = pytube.YouTube("https://www.youtube.com/watch?v=6Z46zHi-Xaw&list=RD6Z46zHi-Xaw&start_radio=1")
-    stream = video.streams.filter(only_audio=True)[1]
-    stream.download(filename="nombre")
+    directory = filedialog.askdirectory(initialdir="/", title="Selecciona una carpeta donde descargar los vídeos...")
+    if directory != '':
+        os.chdir(directory)
+        print(directory)
 
 exterior = tk.Canvas(app, height=700, width=600, bg="orange")
 exterior.pack()
-interior = tk.Frame(app, bg="#bcff1f")
+interior = tk.Frame(exterior, bg="#bcff1f")
 interior.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
 
 des_vid = tk.Button(app, text="Descargar un Vídeo", padx=10,
@@ -26,7 +23,7 @@ des_play = tk.Button(app, text="Descargar una Playlist", padx=10,
                     pady=5, fg="white", bg="#FF00FF")
 des_play.pack()
 des_ub = tk.Button(interior, text="Cambiar la ubicación de descarga", padx=10,
-                    pady=5, fg="orange", bg="white", command=ubicacion())
+                    pady=5, fg="orange", bg="white", command=ubicacion)
 des_ub.pack()
 
 app.mainloop()
