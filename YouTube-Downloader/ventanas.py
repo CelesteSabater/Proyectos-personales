@@ -1,4 +1,3 @@
-.git
 import tkinter as tk
 import os
 from tkinter import filedialog, Text
