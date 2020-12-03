@@ -5,7 +5,7 @@ import time
 
 def descarga(video, name, option, path):
 
-    char_nopermitidos = ["/","&","-","_",":","\\"]
+    char_nopermitidos = ["/","&","-","_","\\"]
     nombre = ""
     for letra in name:
         if letra not in char_nopermitidos:
