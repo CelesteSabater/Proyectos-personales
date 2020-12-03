@@ -1,5 +1,19 @@
 import pytube
 
+
+def descarga(video, name, option):
+    if option == 1:
+        if 'itag="22"' in str(video.streams):
+            stream = video.streams.get_by_itag(22)
+        else:
+            stream = video.streams.get_highest_resolution()
+    else:
+        stream = video.streams.filter(only_audio=True)[1]
+    print('Descargando ' + name + '...')
+    stream.download(filename=name)
+    print("¡Listo!")
+
+
 opcion = int(input("Descargar vídeos: 1. Descargar solo audio: 2.\n"))
 while opcion != 1 and opcion != 2:
     opcion = int(input("Opción no válida.\n"))
@@ -22,29 +36,13 @@ if opcion2 == 1:
         nombres.append(video.title)
 
     for x in range(len(lista_de_descarga)):
-        if opcion == 1:
-            if 'itag="22"' in str(lista_de_descarga[x].streams):
-                stream = lista_de_descarga[x].streams.get_by_itag(22)
-            else:
-                stream = lista_de_descarga[x].streams.get_highest_resolution()
-        else:
-            stream = lista_de_descarga[x].streams.filter(only_audio=True)[0]
-        print('Descargando '+nombres[x]+'...')
-        stream.download(filename=nombres[x])
-        print("¡Listo!")
+        raw_name = nombres[x]
+        descarga(lista_de_descarga[x], raw_name, opcion)
 
 else:
     url = input("Pon la url de la playlist...\n")
     playlist = pytube.Playlist(url)
     for url in playlist:
         video = pytube.YouTube(url)
-        if opcion == 1:
-            if 'itag="22"' in str(video.streams):
-                stream = video.streams.get_by_itag(22)
-            else:
-                stream = video.streams.get_highest_resolution()
-        else:
-            stream = video.streams.filter(only_audio=True)[1]
-        print('Descargando '+video.title+'...')
-        stream.download(filename=video.title)
-        print("¡Listo!")
+        raw_name = video.title
+        descarga(video, raw_name, opcion)
