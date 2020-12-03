@@ -11,7 +11,7 @@ def descarga(video, name, option, path):
         if letra not in char_nopermitidos:
             nombre = nombre + letra
 
-    if option == 1:
+    if option == "1":
         if 'itag="22"' in str(video.streams):
             stream = video.streams.get_by_itag(22)
         else:
@@ -21,19 +21,19 @@ def descarga(video, name, option, path):
 
     print('Descargando ' + nombre + '...')
     stream.download(filename=nombre)
-    if option == 2:
+    if option == "2":
         viejo = path + nombre + ".webm"
         new = path + nombre + ".mp3"
         os.rename(viejo, new)
     print("¡Listo!")
 
 
-opcion = int(input("Descargar vídeos: 1. Descargar solo audio: 2.\n"))
-while opcion != 1 and opcion != 2:
-    opcion = int(input("Opción no válida.\n"))
-opcion2 = int(input("Descargar vídeo sueltos: 1. Descargar playlist: 2.\n"))
-while opcion2 != 1 and opcion2 != 2:
-    opcion2 = int(input("Opción no válida.\n"))
+opcion = input("Descargar vídeos: 1. Descargar solo audio: 2.\n")
+while opcion != "1" and opcion != "2":
+    opcion = input("Opción no válida.\n")
+opcion2 = input("Descargar vídeo sueltos: 1. Descargar playlist: 2.\n")
+while opcion2 != "1" and opcion2 != "2":
+    opcion2 = input("Opción no válida.\n")
 
 path = r'D:\github\Proyectos-personales\YouTube-Downloader' + '\\'
 

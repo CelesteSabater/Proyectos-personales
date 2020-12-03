@@ -1,12 +1,18 @@
 import tkinter as tk
 import os
+import pytube
 from tkinter import filedialog, Text
 
 app = tk.Tk()
 
 def ubicacion():
-    filename = filedialog.askopenfilename(initaildir="/", title="Selecciona una ubicación",
-                                          filetypes=("all files", "*.*"))
+    directory = filedialog.askdirectory(title="Selecciona una carpeta donde descar...")
+    os.chdir(directory)
+    print(directory)
+
+    video = pytube.YouTube("https://www.youtube.com/watch?v=6Z46zHi-Xaw&list=RD6Z46zHi-Xaw&start_radio=1")
+    stream = video.streams.filter(only_audio=True)[1]
+    stream.download(filename="nombre")
 
 exterior = tk.Canvas(app, height=700, width=600, bg="orange")
 exterior.pack()
