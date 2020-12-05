@@ -1,0 +1,19 @@
+background_colour = (255,255,255)
+(width, height) = (630, 630)
+filas = 30
+columnas = 30
+tam_celda = 20
+
+WHITE = (255,255,255)
+GREY = (150, 150, 150)
+RED = (255, 0, 0)
+BLUE = (55, 55, 255)
+BLACK = (0, 0, 0)
+GREEN = (0, 200, 0)
+DARKGREY = (150, 150, 150)
+LIGHTGREY = (210, 210, 210)
+UGLY_PINK = (255, 0, 255)
+BROWN = (153, 76, 0)
+GOLD = (153, 153, 0)
+DARKGREEN = (0, 102, 0)
+DARKORANGE = (255, 128, 0)
