@@ -17,3 +17,9 @@ BROWN = (153, 76, 0)
 GOLD = (153, 153, 0)
 DARKGREEN = (0, 102, 0)
 DARKORANGE = (255, 128, 0)
+
+data = []
+#data[i][j] = 0 es un camino libre
+#data[i][j] = 1 es un muro
+#data[i][j] = 2 es la posición inicial
+#data[i][j] = 3 es la meta

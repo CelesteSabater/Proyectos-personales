@@ -1,22 +1,37 @@
 import pygame
-import random
 from settings import *
 
 c_fondo = WHITE
 c_lin_p = RED
 c_lin_np = BLACK
+c_special = UGLY_PINK
+
+def click_on_grid(pos):
+    if pos[0] > 0 and pos[0] < ((tam_celda+1)*filas) and pos[1] > 0 and pos[1] < ((tam_celda+1) * filas):
+        return True
+    else:
+        return False
+
+def get_grid_pos(pos):
+    i = pos[0]//(tam_celda+1)
+    j = pos[1]//(tam_celda+1)
+    return (i, j)
 
 class celda:
     def __init__(self, i, j, screen):
         self.pos = (i,j)
         self.screen = screen
-        self.pulsada = random.choice((True, False))
-
-    def update(self):
-        pass
+        self.pulsada = False
+        self.special = False
 
     def draw(self):
-        if not self.pulsada:
+        if self.special:
+            pygame.draw.rect(self.screen, c_special,
+                             (self.pos[0]+(self.pos[0]*tam_celda),
+                              self.pos[1] + (self.pos[1] * tam_celda),
+                              tam_celda, tam_celda),0)
+
+        elif not self.pulsada:
             pygame.draw.rect(self.screen, c_lin_np,
                              (self.pos[0]+(self.pos[0]*tam_celda),
                               self.pos[1] + (self.pos[1] * tam_celda),
@@ -26,6 +41,14 @@ class celda:
                              (self.pos[0]+(self.pos[0]*tam_celda),
                               self.pos[1] + (self.pos[1] * tam_celda),
                               tam_celda, tam_celda),0)
+
+    def pulso(self):
+        if not self.special:
+            self.pulsada = not self.pulsada
+
+    def start_end(self):
+        self.special = True
+
 
 class grid:
     def __init__(self, screen):
@@ -37,15 +60,21 @@ class grid:
     def makegrid(self):
         for i in range(filas):
             self.celdas.append([])
+            data.append([])
             for j in range(columnas):
                 self.celdas[i].append(celda(i, j, self.screen))
-
-    def update(self):
-        for i in range(filas):
-            for j in range(columnas):
-                self.celdas[i][j].update()
+                data[i].append(0)
 
     def draw(self):
         for i in range(filas):
             for j in range(columnas):
                 self.celdas[i][j].draw()
+
+    def click(self, pos):
+        i = pos[0]
+        j = pos[1]
+        self.celdas[i][j].pulso()
+        if data[j][i] == 0:
+            data[j][i] = 1
+        else:
+            data[j][i] = 0
