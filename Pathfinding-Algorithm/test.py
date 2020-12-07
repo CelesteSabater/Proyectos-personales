@@ -1,35 +1,13 @@
-from settings import *
+#https://www.redblobgames.com/pathfinding/a-star/implementation.html
 import math
+filas = 20
+columnas = 20
 
 def in_data(node, list):
     for nodo in list:
         if node[0] == nodo[0] and node[1] == nodo[1]:
             return True
     return False
-
-def calc_cost(pos, obj):
-    hor = pos[0] - obj[0]
-    ver = pos[1] - obj[1]
-    if hor < 0:
-        hor = hor * -1
-    if ver < 0:
-        ver = ver * -1
-    cost = 0
-    while hor > 0 or ver > 0:
-        if hor > 0 and ver > 0:
-            cost += 14
-            hor -= 1
-            ver -= 1
-
-        elif ver > 0:
-            cost += 10
-            ver -= 1
-
-        else:
-            cost += 10
-            hor -= 1
-
-    return cost
 
 def pathfinder(data, start_pos, end_pos):
     open = []
@@ -39,7 +17,15 @@ def pathfinder(data, start_pos, end_pos):
     objective = (i, j)
     i = start_pos[0]
     j = start_pos[1]
-    cost = calc_cost((i, j), (objective[0], objective[1]))
+
+    dist_x = (i - objective[0]) * 2
+    if dist_x < 0:
+        dist_x *= -1
+    dist_y = (j - objective[1]) * 2
+    if dist_y < 0:
+        dist_y *= -1
+    cost = math.sqrt(dist_x + dist_y)
+
     open.append((i, j, (cost, cost, 0), None))
     finished = False
     aux = None
@@ -64,7 +50,7 @@ def pathfinder(data, start_pos, end_pos):
         so_we = (i + 1, j - 1)
         west = (i, j - 1)
         no_we = (i - 1, j - 1)
-        vecinitos = [north, east, south, west, no_ea, no_we so_ea, so_we]
+        vecinitos = [north, east, south, west, no_ea, no_we, so_ea, so_we]
         i = 0
         while i < len(vecinitos):
             if vecinitos[i][0] < 0 or vecinitos[i][0] >= filas or vecinitos[i][1] < 0 or vecinitos[i][1] >= columnas:
@@ -85,7 +71,7 @@ def pathfinder(data, start_pos, end_pos):
                     aparecio = True
                     break
 
-            if data[pos[1]][pos[0]] == 1:
+            if data[pos[0]][pos[1]] == 1:
                 pass
             else:
                 # calculo del f_cost del vecino
@@ -145,3 +131,60 @@ def pathfinder(data, start_pos, end_pos):
                 break
 
     return path
+
+grid = [
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+
+# start point and goal
+start = (0, 0)
+goal = (0, 19)
+for linea in grid:
+    for caracter in linea:
+        if caracter == 0:
+            print("-", end="")
+        elif caracter == 1:
+            print("#", end="")
+        elif caracter == 2:
+            print("@", end="")
+        else:
+            print("?", end="")
+    print("")
+print("=============================")
+path = pathfinder(grid, start, goal)
+for mierda in path:
+    i = mierda[0]
+    j = mierda[1]
+    grid[i][j] = 2
+grid[start[0]][start[1]] = 3
+grid[goal[0]][goal[1]] = 3
+for linea in grid:
+    for caracter in linea:
+        if caracter == 0:
+            print("-", end="")
+        elif caracter == 1:
+            print("#", end="")
+        elif caracter == 2:
+            print("@", end="")
+        else:
+            print("?", end="")
+    print("")

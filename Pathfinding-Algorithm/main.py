@@ -62,9 +62,6 @@ data[start_pos["i"]][start_pos["j"]] = 2
 laberinto.celdas[end_pos["j"]][end_pos["i"]].start_end()
 data[end_pos["i"]][end_pos["j"]] = 3
 
-for lineas in data:
-    print(lineas)
-
 #bucle ventana
 running = True
 while running:
@@ -81,8 +78,6 @@ while running:
                 laberinto.click(pos_grid)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                pathfinder(data)
-
-print("\n", "==========", "\n")
-for lineas in data:
-    print(lineas)
+                path = pathfinder(data, (start_pos["i"], start_pos["j"]), (end_pos["i"], end_pos["j"]))
+                for nodo in path:
+                    laberinto.celdas[nodo[1]][nodo[0]].path()

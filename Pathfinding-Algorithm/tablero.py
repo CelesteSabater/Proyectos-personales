@@ -5,6 +5,7 @@ c_fondo = WHITE
 c_lin_p = RED
 c_lin_np = BLACK
 c_special = UGLY_PINK
+c_path = BLUE
 
 def click_on_grid(pos):
     if pos[0] > 0 and pos[0] < ((tam_celda+1)*filas) and pos[1] > 0 and pos[1] < ((tam_celda+1) * filas):
@@ -23,10 +24,17 @@ class celda:
         self.screen = screen
         self.pulsada = False
         self.special = False
+        self.pog = False
 
     def draw(self):
         if self.special:
             pygame.draw.rect(self.screen, c_special,
+                             (self.pos[0]+(self.pos[0]*tam_celda),
+                              self.pos[1] + (self.pos[1] * tam_celda),
+                              tam_celda, tam_celda),0)
+
+        elif self.pog:
+            pygame.draw.rect(self.screen, c_path,
                              (self.pos[0]+(self.pos[0]*tam_celda),
                               self.pos[1] + (self.pos[1] * tam_celda),
                               tam_celda, tam_celda),0)
@@ -49,6 +57,8 @@ class celda:
     def start_end(self):
         self.special = True
 
+    def path(self):
+        self.pog = True
 
 class grid:
     def __init__(self, screen):
@@ -74,7 +84,7 @@ class grid:
         i = pos[0]
         j = pos[1]
         self.celdas[i][j].pulso()
-        if data[j][i] == 0:
-            data[j][i] = 1
+        if data[i][j] == 0:
+            data[i][j] = 1
         else:
-            data[j][i] = 0
+            data[i][j] = 0
