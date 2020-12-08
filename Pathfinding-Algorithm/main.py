@@ -6,9 +6,10 @@ from tablero import *
 
 
 root = Tk()
-start_pos = {"i": -1, "j": -1}
-end_pos = {"i": -1, "j": -1}
-
+start_pos = [-1, -1]
+end_pos = [-1, -1]
+state_end = False
+state_start = False
 
 def dettect_num(original, dict):
     num1 = ""
@@ -30,23 +31,11 @@ def dettect_num(original, dict):
 
 def click():
     dettect_num(start_text.get(), start_pos)
+    state_start = True
     dettect_num(end_text.get(), end_pos)
+    state_end = True
     if start_pos["i"] != -1 and end_pos["i"] != -1 and start_pos["j"] != -1 and end_pos["j"] != -1:
         root.destroy()
-
-
-#ventana emergente que pide posición inicial y final del algoritmo de búsqueda
-text_1 = Label(root, text="Start:(i, j)")
-text_1.pack()
-start_text = Entry(root, width=20, borderwidth=5)
-start_text.pack()
-text_2 = Label(root, text="End:(i, j)")
-text_2.pack()
-end_text = Entry(root, width=20, borderwidth=5)
-end_text.pack()
-boton = Button(root, text="Aceptar posición", command=click)
-boton.pack()
-root.mainloop()
 
 #pygame, crear ventana
 pygame.init()
@@ -57,10 +46,6 @@ pygame.display.flip()
 
 #creación laberinto
 laberinto = grid(screen)
-laberinto.celdas[start_pos["j"]][start_pos["i"]].start_end()
-data[start_pos["i"]][start_pos["j"]] = 2
-laberinto.celdas[end_pos["j"]][end_pos["i"]].start_end()
-data[end_pos["i"]][end_pos["j"]] = 3
 
 #bucle ventana
 running = True
@@ -72,12 +57,31 @@ while running:
         if event.type == pygame.QUIT:
           running = False
           pygame.quit()
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if click_on_grid(pygame.mouse.get_pos()):
                 pos_grid = get_grid_pos(pygame.mouse.get_pos())
-                laberinto.click(pos_grid)
+                if state_start and state_end:
+                    laberinto.click(pos_grid)
+                elif not state_start:
+                    laberinto.celdas[pos_grid[0]][pos_grid[1]].start_end()
+                    data[pos_grid[1]][pos_grid[0]] = 2
+                    start_pos[0] = pos_grid[1]
+                    start_pos[1] = pos_grid[0]
+                    state_start = True
+                else:
+                    laberinto.celdas[pos_grid[0]][pos_grid[1]].start_end()
+                    data[pos_grid[1]][pos_grid[0]] = 3
+                    end_pos[0] = pos_grid[1]
+                    end_pos[1] = pos_grid[0]
+                    state_end = True
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                path = pathfinder(data, (start_pos["i"], start_pos["j"]), (end_pos["i"], end_pos["j"]))
-                for nodo in path:
+                a = AStar_Solver(start_pos, end_pos)
+                a.Solve()
+                for i in range(len(a.path)):
+                    print(str(i) + ")" + " " + str(a.path[i][0]))
+                    print("Padre", str(a.path[i][1]))
+                    nodo = a.path[i][0]
                     laberinto.celdas[nodo[1]][nodo[0]].path()

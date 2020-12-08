@@ -6,6 +6,8 @@ c_lin_p = RED
 c_lin_np = BLACK
 c_special = UGLY_PINK
 c_path = BLUE
+c_investigado = GREEN
+c_open = DARKGREEN
 
 def click_on_grid(pos):
     if pos[0] > 0 and pos[0] < ((tam_celda+1)*filas) and pos[1] > 0 and pos[1] < ((tam_celda+1) * filas):
@@ -25,6 +27,8 @@ class celda:
         self.pulsada = False
         self.special = False
         self.pog = False
+        self.investigado = False
+        self.open = False
 
     def draw(self):
         if self.special:
@@ -35,6 +39,18 @@ class celda:
 
         elif self.pog:
             pygame.draw.rect(self.screen, c_path,
+                             (self.pos[0]+(self.pos[0]*tam_celda),
+                              self.pos[1] + (self.pos[1] * tam_celda),
+                              tam_celda, tam_celda),0)
+
+        elif self.investigado:
+            pygame.draw.rect(self.screen, c_investigado,
+                             (self.pos[0]+(self.pos[0]*tam_celda),
+                              self.pos[1] + (self.pos[1] * tam_celda),
+                              tam_celda, tam_celda),0)
+
+        elif self.open:
+            pygame.draw.rect(self.screen, c_open,
                              (self.pos[0]+(self.pos[0]*tam_celda),
                               self.pos[1] + (self.pos[1] * tam_celda),
                               tam_celda, tam_celda),0)
