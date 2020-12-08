@@ -104,3 +104,12 @@ class grid:
             data[i][j] = 1
         else:
             data[i][j] = 0
+
+    def del_path(self):
+        for filas in self.celdas:
+            for celda in filas:
+                celda.pog = False
+                celda.investigado = False
+                celda.open = False
+                celda.special = False
+                celda.pulsada = False

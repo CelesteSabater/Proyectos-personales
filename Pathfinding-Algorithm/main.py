@@ -77,11 +77,27 @@ while running:
                     state_end = True
 
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                laberinto.del_path()
+                state_end = False
+                state_start = False
+                for i in range(len(data)):
+                    for j in range(len(data[0])):
+                        data[i][j] = 0
+
             if event.key == pygame.K_SPACE:
                 a = AStar_Solver(start_pos, end_pos)
                 a.Solve()
+                for i in range(len(a.visitedQueue)):
+                    nodo = a.visitedQueue[i]
+                    laberinto.celdas[nodo[1]][nodo[0]].investigado = True
+
+                for item in a.open:
+                    print(item.value)
+                    nodo = item.value
+                    laberinto.celdas[nodo[1]][nodo[0]].open = True
+
                 for i in range(len(a.path)):
                     print(str(i) + ")" + " " + str(a.path[i][0]))
-                    print("Padre", str(a.path[i][1]))
                     nodo = a.path[i][0]
                     laberinto.celdas[nodo[1]][nodo[0]].path()

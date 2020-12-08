@@ -18,7 +18,10 @@ class State(object):
             self.goal = parent.goal
             self.path = parent.path.copy()
             self.path.append((value, parent.value))
-            self.dist_g = parent.dist_g + 1
+            if (self.value[0] - parent.value[0] != 0) and (self.value[1] - parent.value[1] != 0):
+                self.dist_g = parent.dist_g + 1.4
+            else:
+                self.dist_g = parent.dist_g + 1
         else:
             self.path = [(value, -1)]
             self.start = start
@@ -32,7 +35,7 @@ class State(object):
         pass
 
 class State_Pos(State):
-    def __init__(self,value,parent,
+    def __init__(self, value, parent,
                  start = 0, goal = 0):
         super(State_Pos, self).__init__(value,
                             parent, start, goal)
@@ -95,6 +98,7 @@ class AStar_Solver:
         self.priorityQueue = PriorityQueue()
         self.start         = start
         self.goal          = goal
+        self.open          = []
 
     def Solve(self):
         #el 0 representa que no tiene hijos
@@ -104,6 +108,7 @@ class AStar_Solver:
                                   self.goal)
         count = 0
         self.priorityQueue.put((0,count,startState))
+        self.open.append(startState)
         #mientras el path esté vacio y mientra priorityq tiene
         #una medida...
         while(not self.path and self.priorityQueue.qsize()):
@@ -111,20 +116,21 @@ class AStar_Solver:
             closestChild = self.priorityQueue.get()[2]
             #y luego le creamos sus hijos respectivos
             closestChild.CreateChildren()
-            #añadimos el hijo este a la lista de visitados
-            self.visitedQueue.append(closestChild.value)
-            #main.laberinto.celdas[closestChild.value[1]][closestChild.value[0]].investigado = True
             for child in closestChild.children:
+                self.open.append(child)
                 if child.value not in self.visitedQueue:
                     count +=1
                     if child.dist_f == -1:
                         self.path = child.path
                         break
                     self.priorityQueue.put((child.dist_f,count,child))
-                    #main.laberinto.celdas[child.value[1]][child.value[0]].open = True
-            #main.screen.fill(background_colour)
-            #main.laberinto.draw()
-            #pygame.display.update()
+            # añadimos el hijo este a la lista de visitados
+            self.visitedQueue.append(closestChild.value)
+            #quitamos el hijo de open
+            for i in range(len(self.open)):
+                if self.open[i].value[0] == closestChild.value[0] and self.open[i].value[1] == closestChild.value[1]:
+                    self.open.pop(i)
+                    break
 
         #esto está por si no hay forma de llegar al objetivo
         if not self.path:
