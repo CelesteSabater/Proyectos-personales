@@ -8,14 +8,6 @@ end_pos = [-1, -1]
 state_end = False
 state_start = False
 
-def click():
-    dettect_num(start_text.get(), start_pos)
-    state_start = True
-    dettect_num(end_text.get(), end_pos)
-    state_end = True
-    if start_pos["i"] != -1 and end_pos["i"] != -1 and start_pos["j"] != -1 and end_pos["j"] != -1:
-        root.destroy()
-
 #pygame, crear ventana
 pygame.init()
 screen = pygame.display.set_mode((width, height))
