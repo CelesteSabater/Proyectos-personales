@@ -1,13 +1,9 @@
-#!/usr/bin/env python
 from settings import *
-import math
 from queue import PriorityQueue
 
-class State(object):
-
+class State_Pos(object):
     def __init__(self, value, parent,
                  start = 0, goal = 0):
-
         self.children = []
         self.parent = parent
         self.value = value
@@ -28,17 +24,6 @@ class State(object):
             self.goal = goal
             self.dist_g = 0
 
-    def GetDistance(self):
-        pass
-
-    def CreateChildren(self):
-        pass
-
-class State_Pos(State):
-    def __init__(self, value, parent,
-                 start = 0, goal = 0):
-        super(State_Pos, self).__init__(value,
-                            parent, start, goal)
         self.dist_f = self.GetDist()
 
     def GetDist(self):
@@ -49,14 +34,10 @@ class State_Pos(State):
         i = self.value[0]
         j = self.value[1]
 
-        dist_x = (i - self.goal[0]) * 2
-        if dist_x < 0:
-            dist_x *= -1
-        dist_y = (j - self.goal[1]) * 2
-        if dist_y < 0:
-            dist_y *= -1
+        dist_x = abs(i - self.goal[0])
+        dist_y = abs(j - self.goal[1])
+        dist_h = abs(dist_x-dist_y)  # h_cost = distancia a destino
 
-        dist_h = math.sqrt(dist_x + dist_y)  # h_cost = distancia a destino
         dist_f = self.dist_g + dist_h
 
         return dist_f
@@ -94,41 +75,41 @@ class State_Pos(State):
 class AStar_Solver:
     def __init__(self, start , goal):
         self.path          = []
-        self.visitedQueue  = []
+        self.open          = []
+        self.closed        = []
         self.priorityQueue = PriorityQueue()
         self.start         = start
         self.goal          = goal
-        self.open          = []
 
     def Solve(self):
         #el 0 representa que no tiene hijos
-        startState = State_Pos(self.start,
+        startPoint = State_Pos(self.start,
                                   0,
                                   self.start,
                                   self.goal)
         count = 0
-        self.priorityQueue.put((0,count,startState))
-        self.open.append(startState)
+        self.priorityQueue.put((0,count,startPoint))
+        self.open.append(startPoint)
         #mientras el path esté vacio y mientra priorityq tiene
         #una medida...
         while(not self.path and self.priorityQueue.qsize()):
             #obtiene el hijo con mejor puntuación de la lista
-            closestChild = self.priorityQueue.get()[2]
+            closestPoint = self.priorityQueue.get()[2]
             #y luego le creamos sus hijos respectivos
-            closestChild.CreateChildren()
-            for child in closestChild.children:
+            closestPoint.CreateChildren()
+            for child in closestPoint.children:
                 self.open.append(child)
-                if child.value not in self.visitedQueue:
+                if child.value not in self.closed:
                     count +=1
                     if child.dist_f == -1:
                         self.path = child.path
                         break
                     self.priorityQueue.put((child.dist_f,count,child))
-            # añadimos el hijo este a la lista de visitados
-            self.visitedQueue.append(closestChild.value)
+            #añadimos el hijo este a la lista de visitados
+            self.closed.append(closestPoint.value)
             #quitamos el hijo de open
             for i in range(len(self.open)):
-                if self.open[i].value[0] == closestChild.value[0] and self.open[i].value[1] == closestChild.value[1]:
+                if self.open[i].value[0] == closestPoint.value[0] and self.open[i].value[1] == closestPoint.value[1]:
                     self.open.pop(i)
                     break
 

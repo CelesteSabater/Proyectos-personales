@@ -1,8 +1,8 @@
 background_colour = (255,255,255)
-(width, height) = (510, 510)
-filas = 10
-columnas = 10
-tam_celda = 50
+(width, height) = (465, 465)
+filas = 15
+columnas = 15
+tam_celda = 30
 
 WHITE = (255,255,255)
 GREY = (150, 150, 150)
