@@ -9,11 +9,3 @@ anchura = 300
 
 k = 3
 ssp = Cjt_Species()
-'''
-a = Specie("a", "aaaagatgaccagcgtaatg", k)
-b = Specie("b", "gcaacctttgtgggcgcagt", k)
-c = Specie("c", "acgatttgcgtaagctatgt", k)
-ssp.add_specie(a)
-ssp.add_specie(b)
-ssp.add_specie(c)
-'''
