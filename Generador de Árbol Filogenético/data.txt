@@ -1,1 +1,1 @@
-@a#aaaagatgaccagcgtaatg@b#gcaacctttgtgggcgcagt@c#acgatttgcgtaagctatgt@d#GCTCCTGTCCGTTTCAGCCG@
+@a#aaaagatgaccagcgtaatg@b#gcaacctttgtgggcgcagt@c#acgatttgcgtaagctatgt@d#gctcctgtccgtttcagccg@e#tacaccattaaccggtgggg@f#gaaaaaaaaaaaaaaaaaaaaa@g#aaaaaaaaaaaaaaaaaaaaaa@nuevo1#tttaaacccggg@

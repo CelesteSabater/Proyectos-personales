@@ -5,9 +5,9 @@ from tkinter import simpledialog as tks
 
 def an_especie_f():
     name = tks.askstring("Nombre", "Pon el nombre de la especie:")
-    name.lower()
+    name = name.lower()
     dna = tks.askstring("ADN", "Pon el ADN de la especie:")
-    dna.lower()
+    dna = dna.lower()
     specie = Specie(name, dna, k)
     esta = ssp.add_specie(specie)
     if esta == -1:
@@ -77,6 +77,22 @@ def print_esps():
         tk.Label(respuesta, text=texto).pack()
         i += 1
 
+def tabla_dist():
+    dist = ssp.matrix_distance()
+    output = []
+    for i in range(len(dist)):
+        texto = ssp.ssp[i].name + ") "
+        j = 0
+        while j < len(dist[i]):
+            texto = texto + ssp.ssp[i+j+1].name + ":" + str(dist[i][j]) + " "
+            j += 1
+        output.append(texto)
+    respuesta = tk.Tk()
+    tk.Label(respuesta, text="Tabla de distancias:").pack()
+    for texto in output:
+        tk.Label(respuesta, text=texto, justify="left").pack()
+
+
 def save_esps():
     lista = ssp.get_cjt()
     output = []
@@ -90,10 +106,10 @@ def save_esps():
 
 def load_data():
     f = open("data.txt", 'r')
+    state = False  # estado si estamos leyendo el nombre
+    name = ""
+    dna = ""
     for line in f:
-        state = False #estado si estamos leyendo el nombre
-        name = ""
-        dna = ""
         for chr in line:
             if chr == "@":
                 if dna != "":

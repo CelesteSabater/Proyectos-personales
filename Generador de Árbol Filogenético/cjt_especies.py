@@ -1,3 +1,5 @@
+from specie     import *
+
 #########FUNCIONES PRIVADAS
 def juntar(kmer1, kmer2):
     it1 = 0
@@ -48,31 +50,6 @@ def unionmap(conjunto):
 
 
 #########FUNCIONES PÚBLICAS
-class Specie:
-    def __init__(self, name, dna, k):
-        self.name = name
-        self.dna = dna
-        self.kmer = self.generate_kmer(dna, k)
-
-    def generate_kmer(self, dna, k):
-        conjuntos = []
-        for i in range(len(dna)-k+1):
-            letras = ""
-            for j in range(i, i+k):
-                letras = letras + dna[j]
-            conjuntos.append(letras)
-        kmer = {}
-        for letras in conjuntos:
-            if letras in kmer.keys():
-                kmer[letras] += 1
-            else:
-                kmer[letras] = 1
-        conjunto = {}
-        for letras in sorted(kmer.keys()):
-            conjunto[letras] = kmer[letras]
-        return conjunto
-
-
 class Cjt_Species:
     def __init__(self):
         self.ssp = []
@@ -114,22 +91,28 @@ class Cjt_Species:
         conjunto = juntar(kmer1, kmer2)
         ene1 = intersection(conjunto)
         ene2 = unionmap(conjunto)
-        return ((1 - (ene1 / ene2)) * 100)
+        num = ((1 - (ene1 / ene2)) * 100)
+        num = round(num, 3)
+        return num
 
     def deletos(self, name):
         encontrada = False
+        fuera = None
         for i in range(len(self.ssp)):
             if self.ssp[i].name == name:
                 encontrada = True
+                fuera = i
                 break
         if encontrada:
-            self.ssp.pop(i)
+            self.ssp.pop(fuera)
+            self.modified = True
             return 1
         else:
             return -1
 
     def full_deletos(self):
         i = 0
+        self.modified = True
         while i < len(self.ssp):
             self.ssp.pop(i)
 
@@ -142,5 +125,28 @@ class Cjt_Species:
     def get_cjt(self):
         lista = []
         for especie in self.ssp:
-            lista.append((especie.name, especie.dna))
+            lista.append((especie.name.lower(), especie.dna.lower()))
         return lista
+
+    def make_matrix(self):
+        dist = []
+        for i in range(len(self.ssp)-1):
+            dist.append([])
+            j = i +1
+            while j < len(self.ssp):
+                kmer1 = self.ssp[i].kmer
+                kmer2 = self.ssp[j].kmer
+                conjunto = juntar(kmer1, kmer2)
+                ene1 = intersection(conjunto)
+                ene2 = unionmap(conjunto)
+                num = ((1 - (ene1 / ene2)) * 100)
+                num = round(num, 3)
+                dist[i].append(num)
+                j += 1
+        return dist
+
+    def matrix_distance(self):
+        if self.modified:
+            self.dist = self.make_matrix()
+            self.modified = False
+        return self.dist

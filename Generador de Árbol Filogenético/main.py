@@ -45,6 +45,11 @@ print_cjt_especies = tk.Button(fondo, text="Imprimir conjunto especies", padx=10
 i += 1
 button7_window = fondo.create_window((anchura+10)/2, i * 30 , window=print_cjt_especies)
 
+#boton imprimir tabla distancia
+print_tabla = tk.Button(fondo, text="Imprimir tabla distancias", padx=10, pady=2.5, fg=color_texto, bg=color_boton, command=tabla_dist)
+i += 1
+button8_window = fondo.create_window((anchura+10)/2, i * 30 , window=print_tabla)
+
 
 root.mainloop()
 
