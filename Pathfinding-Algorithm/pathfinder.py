@@ -15,7 +15,7 @@ class State_Pos(object):
             self.path = parent.path.copy()
             self.path.append((value, parent.value))
             if (self.value[0] - parent.value[0] != 0) and (self.value[1] - parent.value[1] != 0):
-                self.dist_g = parent.dist_g + 1.4
+                self.dist_g = parent.dist_g + 2
             else:
                 self.dist_g = parent.dist_g + 1
         else:
